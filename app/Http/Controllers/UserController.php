@@ -1,10 +1,9 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Model\AppUser;
+use App\Model\AppUser;
 
 class UserController
 {
