@@ -1,34 +1,56 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.3.29-fpm-bullseye AS base
 
-ARG UID
-ARG GID
+WORKDIR /workspace
 
-ENV UID=${UID}
-ENV GID=${GID}
+# timezone environment
+ENV TZ=UTC \
+  # locale
+  LANG=en_US.UTF-8 \
+  LANGUAGE=en_US:en \
+  LC_ALL=en_US.UTF-8 \
+  # composer environment
+  COMPOSER_ALLOW_SUPERUSER=1 \
+  COMPOSER_HOME=/composer
 
-RUN mkdir -p /var/www/html
+COPY --from=composer:2.4 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+RUN apt-get update \
+  && apt-get -y install --no-install-recommends \
+    locales \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && locale-gen en_US.UTF-8 \
+  && localedef -f UTF-8 -i en_US en_US.UTF-8 \
+  && docker-php-ext-install \
+    intl \
+    pdo_mysql \
+    zip \
+    bcmath \
+  && composer config -g process-timeout 3600 \
+  && composer config -g repos.packagist composer https://packagist.org
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+FROM base AS development
 
-# MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
-RUN delgroup dialout
+#COPY ./dockerfiles/php.development.ini /usr/local/etc/php/php.ini
 
-RUN addgroup -g ${GID} --system laravel
-RUN adduser -G laravel --system -D -s /bin/sh -u ${UID} laravel
+FROM development AS development-xdebug
 
-RUN sed -i "s/user = www-data/user = laravel/g" /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i "s/group = www-data/group = laravel/g" /usr/local/etc/php-fpm.d/www.conf
-RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
+RUN pecl install xdebug && \
+  docker-php-ext-enable xdebug
 
-RUN docker-php-ext-install pdo pdo_mysql
+#COPY ./dockerfiles/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-RUN mkdir -p /usr/src/php/ext/redis \
-    && curl -L https://github.com/phpredis/phpredis/archive/5.3.4.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
-    && echo 'redis' >> /usr/src/php-available-exts \
-    && docker-php-ext-install redis
+FROM base AS deploy
 
-USER laravel
+#COPY ./dockerfiles/php.deploy.ini /usr/local/etc/php/php.ini
+COPY ./ /workspace
 
-CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
+# RUN composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist \
+#   && chmod -R 777 storage bootstrap/cache \
+#   && php artisan optimize:clear \
+#   && php artisan optimize

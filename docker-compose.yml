@@ -7,13 +7,13 @@ services:
     build:
       context: ./dockerfiles
       dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
     ports:
       - "9000:9000"
     volumes:
-      - ./:/var/www/html:delegated
+      - ./:/var/www/html
+      - type: bind
+        source: ./
+        target: /workspace
     networks:
       - laravel
 
@@ -25,17 +25,17 @@ services:
     networks:
       - laravel
 
-  composer:
-    build:
-      context: ./dockerfiles
-      dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    volumes:
-      - ./src:/var/www/html
-    depends_on:
-      - php
-    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
-    networks:
-      - laravel
+#  composer:
+#    build:
+#      context: ./dockerfiles
+#      dockerfile: php.dockerfile
+#      args:
+#        - UID=${UID:-1000}
+#        - GID=${GID:-1000}
+#    volumes:
+#      - ./src:/var/www/html
+#    depends_on:
+#      - php
+#    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
+#    networks:
+#      - laravel
