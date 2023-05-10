@@ -19,13 +19,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(["prefix"=>"wechat"],function (){
-       Route::post("login",'WechatController@login');
-       Route::post("decode",'WechatController@decode');
+Route::group(["prefix" => "wechat"], function () {
+    Route::post("login", 'WechatController@login');
+    Route::post("decode", 'WechatController@decode');
 });
 
-Route::group(["prefix"=>"pay"],function (){
-    Route::post("create",'PayController@create');
-    Route::post("order",'PayController@order');
+Route::group(["prefix" => "pay"], function () {
+    Route::post("create", 'PayController@create');
+    Route::post("order", 'PayController@order');
+    Route::post("notice", 'PayController@notic');
+});
+
+Route::group(["prefix" => "user"], function () {
+    Route::post("create", 'UserController@create');
 });
 
