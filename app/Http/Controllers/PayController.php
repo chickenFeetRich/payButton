@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\AppUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use App\Model\AppOrders;
@@ -12,9 +13,10 @@ use Overtrue\LaravelWeChat\Facade;
 class PayController
 {
     protected $app;
+
     public function __construct()
     {
-        $this->app =  Facade::payment("default");
+        $this->app = Facade::payment("default");
     }
 
     public function create(Request $request)
@@ -23,7 +25,7 @@ class PayController
         $goodsId = $request->post("goods_id");
         $openid = $request->post("openid");
 
-        $order =  new AppOrders();
+        $order = new AppOrders();
         $order->amount = 1;
         $order->goods_id = $goodsId;
         $order->uid = $userId;
@@ -53,9 +55,37 @@ class PayController
     /**
      *
      */
-    public function notice(){
-        return [
+    public function notice(Request $request)
+    {
+        $response = $this->app->handlePaidNotify(function ($message, $fail) {
+            // 你的逻辑
+            $orderId = $message['out_trade_no'];
+            $data = AppOrders::where('id', '=', $orderId)->first();
+            if (empty($data)) {
+                // 或者错误消息
+                $fail('Order not exists.');
+            }
 
-        ];
+            AppOrders::where('id', $orderId)
+                ->update([
+                    'out_order_number' => $data['transaction_id'],
+                    'updated_time' => time(),
+                    'status' => AppOrders::ORDER_STATUS_PAY
+                ]);
+
+            AppUser::where('id',$data['uid'])->update([
+                'updated_time' => time(),
+                'status' => AppOrders::ORDER_STATUS_PAY
+            ]);
+        });
+        return $response;
+    }
+
+    public function status(Request $request)
+    {
+        $orderId = $request->post("order_id");
+
+        $data = AppOrders::where('id', '=', $orderId)->first();
+        return $data;
     }
 }
