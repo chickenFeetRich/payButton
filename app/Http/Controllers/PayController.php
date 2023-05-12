@@ -34,7 +34,7 @@ class PayController
             'body' => '天天互娱',
             'out_trade_no' => $order->id,
             'total_fee' => $order->amount,
-            'notify_url' => 'https://pay.jubaohuizhong.con/api/pay/notice', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+            'notify_url' => 'https://pay.jubaohuizhong.com/api/pay/notice', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
             'trade_type' => 'JSAPI', // 请对应换成你的支付方式对应的值类型
             'openid' => $openid,
         ]);
