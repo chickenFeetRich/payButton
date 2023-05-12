@@ -69,7 +69,7 @@ class PayController
 
             AppOrders::where('id', $orderId)
                 ->update([
-                    'out_order_number' => $data['transaction_id'],
+                    'out_order_number' => $message['transaction_id'],
                     'updated_time' => time(),
                     'status' => AppOrders::ORDER_STATUS_PAY
                 ]);

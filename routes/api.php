@@ -27,7 +27,7 @@ Route::group(["prefix" => "wechat"], function () {
 Route::group(["prefix" => "pay"], function () {
     Route::post("create", 'PayController@create');
     Route::post("order", 'PayController@order');
-    Route::post("notice", 'PayController@notic');
+    Route::post("notice", 'PayController@notice');
     Route::post("status", 'PayController@status');
 });
 
