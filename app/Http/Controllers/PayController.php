@@ -39,6 +39,7 @@ class PayController
             'openid' => $openid,
         ]);
         //prepay_id
+        $result['order_id'] = $order->id;
         return $result;
     }
 
