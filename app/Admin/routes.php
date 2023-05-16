@@ -14,4 +14,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->get('order', 'OrderController@index')->name('order');
 
+    $router->resource('conf', ConfController::class);
+
+
 });

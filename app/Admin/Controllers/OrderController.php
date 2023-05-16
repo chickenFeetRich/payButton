@@ -13,7 +13,7 @@ use App\Model\AppOrders;
 
 class OrderController extends AdminController
 {
-    protected $title = 'Users';
+    protected $title = '订单中心';
 
     protected function grid()
     {

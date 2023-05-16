@@ -35,3 +35,7 @@ Route::group(["prefix" => "user"], function () {
     Route::post("create", 'UserController@create');
 });
 
+Route::group(["prefix" => "conf"], function () {
+    Route::get("jump", 'ConfController@jump');
+});
+

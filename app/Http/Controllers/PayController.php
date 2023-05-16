@@ -30,6 +30,7 @@ class PayController
         $order->goods_id = $goodsId;
         $order->uid = $userId;
         $order->save();
+
         $result = $this->app->order->unify([
             'body' => '天天互娱',
             'out_trade_no' => $order->id,
