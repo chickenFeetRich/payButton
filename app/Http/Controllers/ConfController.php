@@ -12,7 +12,7 @@ class ConfController
 {
     public function jump(Request $request)
     {
-        $key =  $request->get('key');
+        $key =  $request->post('key');
         if(empty($key)){
             return [];
         }

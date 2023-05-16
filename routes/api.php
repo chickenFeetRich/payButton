@@ -36,6 +36,6 @@ Route::group(["prefix" => "user"], function () {
 });
 
 Route::group(["prefix" => "conf"], function () {
-    Route::get("jump", 'ConfController@jump');
+    Route::post("jump", 'ConfController@jump');
 });
 
