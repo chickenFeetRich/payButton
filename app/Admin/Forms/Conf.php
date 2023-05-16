@@ -36,7 +36,7 @@ class Conf extends Form
     public function form()
     {
         $this->text('key')->rules('required');
-        $this->text('value')->rules('required');
+        $this->text('value')->rules('required')->placeholder('请输入配置值（金额单位为分）');
     }
 
     /**

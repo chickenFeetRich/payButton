@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\AppConf;
 use App\Model\AppUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -25,8 +26,11 @@ class PayController
         $goodsId = $request->post("goods_id");
         $openid = $request->post("openid");
 
+        $key = "sys_price";
+        $app  = AppConf::where('key' ,'=',$key)->first();
+
         $order = new AppOrders();
-        $order->amount = 1;
+        $order->amount = $app ? $app['value']:1;
         $order->goods_id = $goodsId;
         $order->uid = $userId;
         $order->save();
