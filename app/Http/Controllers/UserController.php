@@ -28,4 +28,12 @@ class UserController
             'status' => $appUser->status
         ];
     }
+
+    public function get(Request $request)
+    {
+        $openid = $request->post("openid");
+
+        $appUser = AppUser::where('openid', $openid)->first();
+        return $appUser;
+    }
 }

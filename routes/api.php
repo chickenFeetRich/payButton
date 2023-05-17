@@ -33,6 +33,7 @@ Route::group(["prefix" => "pay"], function () {
 
 Route::group(["prefix" => "user"], function () {
     Route::post("create", 'UserController@create');
+    Route::post("get", 'UserController@get');
 });
 
 Route::group(["prefix" => "conf"], function () {
