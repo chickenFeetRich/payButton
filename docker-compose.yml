@@ -25,8 +25,8 @@ services:
     networks:
       - laravel
   mysqldb:
-    image: mysql:${MYSQL_VERSION}
-    container_name: ${MYSQL_HOST}
+    image: mysql:8.0
+    container_name: mysql.local
     restart: always
     env_file:
       - ".env"
