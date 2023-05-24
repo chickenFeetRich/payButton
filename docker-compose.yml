@@ -24,6 +24,21 @@ services:
       - "6379:6379"
     networks:
       - laravel
+  mysqldb:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${MYSQL_HOST}
+    restart: always
+    env_file:
+      - ".env"
+    environment:
+      - MYSQL_DATABASE=project_button
+      - MYSQL_ROOT_PASSWORD=hellomini
+      - MYSQL_USER=button
+      - MYSQL_PASSWORD=hellobutton
+    ports:
+      - "8989:3306"
+    volumes:
+      - "./data/db/mysql:/var/lib/mysql"
 
 #  composer:
 #    build:
