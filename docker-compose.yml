@@ -16,6 +16,8 @@ services:
         target: /workspace
     networks:
       - laravel
+    links:
+      - mysqldb
 
   redis:
     image: redis:alpine
