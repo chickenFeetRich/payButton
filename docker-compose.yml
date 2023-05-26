@@ -30,8 +30,6 @@ services:
     image: mysql:8.0
     container_name: mysql.local
     restart: always
-    env_file:
-      - ".env"
     environment:
       - MYSQL_DATABASE=project_button
       - MYSQL_ROOT_PASSWORD=hellomini
