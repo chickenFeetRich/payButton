@@ -1,4 +1,4 @@
-FROM php:7.3.29-fpm-bullseye AS base
+FROM php:7.4.22-fpm-bullseye AS base
 
 WORKDIR /workspace
 
@@ -32,7 +32,7 @@ RUN apt-get update \
     zip \
     bcmath \
   && composer config -g process-timeout 3600 \
-  && composer config -g repos.packagist composer https://packagist.org
+  && composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
 FROM base AS development
 
