@@ -1,0 +1,11 @@
+version: '3'
+services:
+  php:
+    image: php:5.4.44-fpm
+    ports:
+      - "9090:9000"
+    volumes:
+      - ./pm:/var/www/html
+      - type: bind
+        source: ./
+        target: /workspace
