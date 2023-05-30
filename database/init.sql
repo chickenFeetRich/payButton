@@ -20,3 +20,13 @@ CREATE TABLE `app_orders` (
   `updated_time` int(10) unsigned NOT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 comment "订单表";
+
+
+create table `app_conf` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` text  DEFAULT NULL  comment '系统配置',
+  `value` text  DEFAULT NULL comment '配置value',
+  `created_time` int(10) unsigned NOT NULL ,
+  `updated_time` int(10) unsigned NOT NULL ,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 comment "订单表";
